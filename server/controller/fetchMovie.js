@@ -6,17 +6,15 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const fetchStory = async(req, res) =>{
+const fetchMovie = async(req, res) =>{
     try {
         const objects = req.body.objects
         const genre = req.body.genre
         const words = req.body.words
         const twist = req.body.twist
-        const storyType = req.body.storyType
 
         const prompt = `
-            write me a story for me with the following details:-
-            Type: ${storyType}
+            write me a movie for me with the following details:-
             Objects present in the story: ${objects},
             Genre: ${genre},
             Total word limit: ${words},
@@ -52,4 +50,4 @@ const fetchStory = async(req, res) =>{
     }
 }
 
-export default fetchStory
+export default fetchMovie

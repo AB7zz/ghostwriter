@@ -21,27 +21,33 @@ const fetchSong = async(req, res) =>{
             Type: ${songType}
             Objects present in the song: ${objects},
             Genre: ${genre},
-            Theme: ${theme},
-            Mood: ${mood},
-            Rhyme: ${rhyme},
-            Lyrics: ${lyrics}
             Where the value is anything, you can just replace it with anything thats suitable.
 
             And give the response in the following JSON format
             {
                 "title": "title of the song",
-                "story": "song"
+                "data": "song"
             }
 
         `;
+
+        const prompt2 = `
+        write me a joke about a cat and a bowl of pasta. Return response in the following parsable JSON format:
+
+        {
+            "Q": "question",
+            "A": "answer"
+        }
+        `
+
         const chatCompletion = await openai.createCompletion({
             model: "text-davinci-003",
             max_tokens:2048 ,
             temperature: 0,
-            prompt: prompt
+            prompt: prompt2
         });
 
-        res.json({story: chatCompletion.data.choices[0].text})
+        res.json(chatCompletion.data.choices[0].text)
     } catch (error) {
         console.log(error)
     }

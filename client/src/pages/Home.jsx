@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 const Home = () => {
-  const [story, setStory] = React.useState()
+  const [result, setResult] = React.useState()
   const [type, setType] = React.useState('story')
   const [objects, setObjects] = React.useState('')
 
@@ -37,10 +37,12 @@ const Home = () => {
         res = await axios.post('http://localhost:5000/gapi/story', {objects, genre, words, twist, storyType})
       }else if(type == "song"){
         res = await axios.post('http://localhost:5000/gapi/song', {objects, genre, mood, lyrics, theme, rhyme, songType})
+      }else{
+        res = await axios.post('http://localhost:5000/gapi/movie', {objects, genre, words, twist})
       }
 
-      if(res.data.story){
-        setStory(JSON.parse(res.data.story))
+      if(res.data){
+        setResult(JSON.parse(res.data))
       }
     } catch (error) {
       console.log(error)
@@ -69,10 +71,10 @@ const Home = () => {
               <option value="folk">Folk</option>
             </select>
             <input onChange={e => setGenre(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="genre" name="genre" />
-            <input onChange={e => setMood(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Mood" name="mood" />
+            {/* <input onChange={e => setMood(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Mood" name="mood" />
             <input onChange={e => setTheme(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Theme" name="theme" />
             <input onChange={e => setLyrics(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Lyrics Style" name="lyrics" />
-            <input onChange={e => setRhyme(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Rhyme Scheme" name="rhyme" />
+            <input onChange={e => setRhyme(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="Rhyme Scheme" name="rhyme" /> */}
             <button type="submit" className='bg-blue-500 text-white px-3 py-2 rounded'>Submit</button>
           </>
           : type == "story" ? 
@@ -91,13 +93,25 @@ const Home = () => {
             </select>
             <button type="submit" className='bg-blue-500 text-white px-3 py-2 rounded'>Submit</button>
           </>
+          : type == "movie" ?
+          <>
+            <input onChange={e => setGenre(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="text" placeholder="genre" name="genre" />
+            <input onChange={e => setWords(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' type="number" placeholder="word limit" name="word" />
+            <select onChange={e => setTwist(e.target.value)} className='border-2 rounded px-3 py-2 ml-5' name="type" id="">
+              <option value="">--Do you want a Twist?--</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <button type="submit" className='bg-blue-500 text-white px-3 py-2 rounded'>Submit</button>
+          </>
+
           : <></>
         }
         {
-          story && 
+          result && 
           <>
-            <h1 className='text-xl font-bold'>{story.title}</h1>
-            <p className='text-lg'>{story.story}</p>
+            <h1 className='text-xl font-bold'>{result.title}</h1>
+            <p className='text-lg'>{result.data}</p>
           </>
         }
       </form>
