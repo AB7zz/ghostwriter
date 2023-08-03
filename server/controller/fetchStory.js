@@ -6,19 +6,21 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const sendReq = async(req, res) =>{
+const fetchStory = async(req, res) =>{
     try {
         const objects = req.body.objects
         const genre = req.body.genre
         const words = req.body.words
-        const type = req.body.type
+        const twist = req.body.twist
+        const storyType = req.body.storyType
 
         const prompt = `
-            write me someting for me with the following details:-
-            Type: ${type}
+            write me a story for me with the following details:-
+            Type: ${storyType}
             Objects present in the story: ${objects},
             Genre: ${genre},
             Total word limit: ${words},
+            Should there be a twist? : ${twist}
 
             And give the response in the following JSON format
             {
@@ -27,11 +29,21 @@ const sendReq = async(req, res) =>{
             }
 
         `;
+
+        const prompt2 = `
+        write me a joke about a cat and a bowl of pasta. Return response in the following parsable JSON format:
+
+        {
+            "Q": "question",
+            "A": "answer"
+        }
+
+    `;
         const chatCompletion = await openai.createCompletion({
             model: "text-davinci-003",
-            max_tokens:2048 ,
+            max_tokens: 2048,
             temperature: 0,
-            prompt: prompt
+            prompt: prompt2
         });
 
         res.json({story: chatCompletion.data.choices[0].text})
@@ -40,4 +52,4 @@ const sendReq = async(req, res) =>{
     }
 }
 
-export default sendReq
+export default fetchStory
