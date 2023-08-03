@@ -10,20 +10,15 @@ const fetchSong = async(req, res) =>{
     try {
         const objects = req.body.objects
         const genre = req.body.genre
-        const mood = req.body.mood
-        const lyrics = req.body.lyrics
-        const theme = req.body.theme
-        const rhyme = req.body.rhyme
         const songType = req.body.songType
 
         const prompt = `
-            write me a song for me with the following details:-
+            write me a song along with a good title for me with the following details:-
             Type: ${songType}
             Objects present in the song: ${objects},
-            Genre: ${genre},
-            Where the value is anything, you can just replace it with anything thats suitable.
+            Genre: ${genre}
 
-            And give the response in the following JSON format
+            And give the response in the following JSON format. And wherever there is a line break, replace it with \\n. And if there is any gap between verses and choruses, replace it with \\n
             {
                 "title": "title of the song",
                 "data": "song"
@@ -44,9 +39,10 @@ const fetchSong = async(req, res) =>{
             model: "text-davinci-003",
             max_tokens:2048 ,
             temperature: 0,
-            prompt: prompt2
+            prompt: prompt
         });
 
+        console.log(chatCompletion.data.choices[0].text)
         res.json(chatCompletion.data.choices[0].text)
     } catch (error) {
         console.log(error)

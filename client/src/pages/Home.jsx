@@ -36,12 +36,13 @@ const Home = () => {
         console.log(objects, genre, words, storyType, twist)
         res = await axios.post('http://localhost:5000/gapi/story', {objects, genre, words, twist, storyType})
       }else if(type == "song"){
-        res = await axios.post('http://localhost:5000/gapi/song', {objects, genre, mood, lyrics, theme, rhyme, songType})
+        res = await axios.post('http://localhost:5000/gapi/song', {objects, songType})
       }else{
         res = await axios.post('http://localhost:5000/gapi/movie', {objects, genre, words, twist})
       }
 
       if(res.data){
+        console.log(res.data)
         setResult(JSON.parse(res.data))
       }
     } catch (error) {
@@ -107,14 +108,21 @@ const Home = () => {
 
           : <></>
         }
-        {
-          result && 
-          <>
-            <h1 className='text-xl font-bold'>{result.title}</h1>
-            <p className='text-lg'>{result.data}</p>
-          </>
-        }
       </form>
+      {
+        result && type == "song" ?
+        <>
+          <h1 className='text-xl font-bold'>{result.title}</h1>
+          <pre className='text-lg'>{result.data}</pre>
+        </>
+        : result && type != "song" ? 
+        <>
+          <h1 className='text-xl font-bold'>{result.title}</h1>
+          <p className='text-lg'>{result.data}</p>
+        </>
+        :
+        <></>
+      }
     </>
   )
 }

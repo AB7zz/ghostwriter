@@ -14,15 +14,15 @@ const fetchMovie = async(req, res) =>{
         const twist = req.body.twist
 
         const prompt = `
-            write me a movie for me with the following details:-
+            write me a movie and an approriate title for me with the following details:-
             Objects present in the story: ${objects},
             Genre: ${genre},
             Total word limit: ${words},
             Should there be a twist? : ${twist}
 
-            And give the response in the following JSON format
+            And give the response in the following JSON format. And in the story, insert a \\n every 20 words to represent a line break and then continue without any line breaks/gaps
             {
-                "title": "title of the story",
+                "title": "title of the movie",
                 "data": "story"
             }
 
@@ -41,9 +41,10 @@ const fetchMovie = async(req, res) =>{
             model: "text-davinci-003",
             max_tokens: 2048,
             temperature: 0,
-            prompt: prompt2
+            prompt: prompt
         });
 
+        console.log(chatCompletion.data.choices[0].text)
         res.json(chatCompletion.data.choices[0].text)
     } catch (error) {
         console.log(error)

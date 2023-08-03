@@ -43,7 +43,7 @@ const fetchStory = async(req, res) =>{
             model: "text-davinci-003",
             max_tokens: 2048,
             temperature: 0,
-            prompt: prompt2
+            prompt: prompt
         });
 
         res.json(chatCompletion.data.choices[0].text)
